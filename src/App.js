@@ -5,11 +5,14 @@ import PropTypes from "prop-types";
 import TextForm from "./components/TextForm";
 import Alert from "./components/Alert";
 import Accordian from "./components/Accordian";
-import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
+  //state defined in app.js because we can control every pages from here
   const [mode, setMode] = useState("light");
   const [alert, setAlert] = useState(null);
+
+  //this function will be called when a button is clicked
   const toggleMode = () => {
     if (mode === "light") {
       setMode("dark");
@@ -18,21 +21,6 @@ function App() {
     } else {
       setMode("light");
       document.body.style.backgroundColor = "white";
-      showAlert("Light mode activated", "success");
-    }
-  };
-  const toggleModeBlack = () => {
-    if (mode === "light") {
-      setMode("dark");
-      document.body.style.backgroundColor = "#040404";
-      TextForm.getElementsByClassName("btn-primary").style.backgroundColor =
-        "grey";
-      showAlert("Dark black mode activated", "success");
-    } else {
-      setMode("light");
-      document.body.style.backgroundColor = "white";
-      document.getElementsByClassName("btn-primary").style.backgroundColor =
-        "#0d6efd";
       showAlert("Light mode activated", "success");
     }
   };
@@ -50,22 +38,17 @@ function App() {
   return (
     <>
       <Router>
-        <Navbar
-          title="textUtils"
-          mode={mode}
-          toggleMode={toggleMode}
-          toggleModeBlack={toggleModeBlack}
-        />
+        <Navbar title="textUtils" mode={mode} toggleMode={toggleMode} />
         <Alert alert={alert} />
         <Routes>
-          <Route exact path="/about" element={<Accordian />} />
+          <Route exact path="/about" element={<Accordian mode={mode} />} />
           <Route
             exact
             path="/"
             element={
               <TextForm
+                heading="Enter text here to analyze"
                 mode={mode}
-                toggleModeBlack={toggleModeBlack}
                 showAlert={showAlert}
               />
             }
